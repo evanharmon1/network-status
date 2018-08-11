@@ -1,12 +1,23 @@
+#!/usr/bin/env python3
+
 import os
 import time
 import datetime
+import json
 
 print("Checking host statuses...")
 
 # Url variable initialization
 url_down = 0 #Count of how many times the url has been pinged as down until a successful ping resets the count
 url_timestamp = 0 #Timestamp of the ping
+
+# Load config.json
+with open('config.json', 'r') as f:
+    config = json.load(f)
+
+url = config['URL']
+url_grace = config['URL_GRACE']
+interval = config['INTERVAL']
 
 #url = url of host to check; url_grace = how many minutes of being down before you want to be notified
 def check(url, url_grace):
@@ -25,5 +36,5 @@ def check(url, url_grace):
             print("and has been down for", url_down - 1, "minutes")
 
 while True:
-    check("google.com", 5)
-    time.sleep(60)
+    check(url, url_grace)
+    time.sleep(interval)
